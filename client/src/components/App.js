@@ -2,16 +2,19 @@ import 'semantic-ui-css/semantic.min.css';
 
 import React from "react";
 import { BrowserRouter, Route } from 'react-router-dom';
+import { Container } from 'semantic-ui-react'
+
+import ProductList from './ProductList';
 
 const App = () => {
     return (
-        <div className="ui container">
+        <Container>
             <BrowserRouter>
                 <div>
-                    <Route path="/" exact component={() => <div>App</div>}/>
+                    <Route path="/" exact component={() => <ProductList/>}/>
                 </div>
             </BrowserRouter>
-        </div>
+        </Container>
     );
 }
 
