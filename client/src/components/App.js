@@ -8,6 +8,7 @@ import { Container } from 'semantic-ui-react'
 import ProductList from './ProductList';
 import SearchBar from './SearchBar';
 import FilterBox from './FilterBox';
+import comercia from '../apis/comercia';
 
 const products = [
     {
@@ -43,6 +44,11 @@ class App extends React.Component {
             filters: {}
         }
     }
+
+    getComerciaUsers = async () => {
+        const response = await comercia.get('/products');
+        console.log(response);
+    };
 
     onFilterByRating = value => {
         const filters = this.state.filters;
@@ -92,6 +98,7 @@ class App extends React.Component {
     }
 
     render() {
+        this.getComerciaUsers();
         return (
             <Container>
                 <BrowserRouter>
