@@ -5,6 +5,10 @@
     padding: 2em 0;
 }
 
+.flex-container, .search-bar {
+    padding: 1em 0;
+}
+
 .card-extra-container {
     display: flex;
     justify-content: space-around;
