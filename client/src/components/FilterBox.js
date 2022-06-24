@@ -29,22 +29,25 @@ class FilterBox extends React.Component {
     const { activeIndex } = this.state
 
     return (
-      <Accordion styled>
-        <Accordion.Title
-          active={activeIndex === 0}
-          index={0}
-          onClick={this.handleClick}
-        >
-          <Icon name='dropdown' />
-          Filtros
-        </Accordion.Title>
-        <Accordion.Content active={activeIndex === 0}>
-            <Container textAlign='center'>
-                <Rating icon='heart' defaultRating={this.state.rating} maxRating={3} onRate={this.handleRate} size="massive" clearable/>
-            </Container>
-            
-        </Accordion.Content>
-      </Accordion>
+        <div className='flex-container small-padding'>
+            <Accordion styled>
+                <Accordion.Title
+                active={activeIndex === 0}
+                index={0}
+                onClick={this.handleClick}
+                >
+                <Icon name='dropdown' />
+                Filtros
+                </Accordion.Title>
+                <Accordion.Content active={activeIndex === 0}>
+                    <Container textAlign='center'>
+                        <Rating icon='heart' defaultRating={this.state.rating} maxRating={3} onRate={this.handleRate} size="massive" clearable/>
+                    </Container>
+                    
+                </Accordion.Content>
+        </Accordion>
+        </div>
+      
     )
   }
 }
