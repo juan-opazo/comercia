@@ -7,6 +7,7 @@ import { Container } from 'semantic-ui-react'
 
 import ProductList from './ProductList';
 import SearchBar from './SearchBar';
+import FilterBox from './FilterBox';
 
 const products = [
     {
@@ -38,11 +39,18 @@ class App extends React.Component {
         super(props);
         this.state = {
             products: [],
-            loading: false
+            loading: false,
+            filters: {}
         }
     }
 
-    onSearchSubmit = term => {
+    onFilterByRating = value => {
+        const filters = this.state.filters;
+        filters.rating = value;
+        this.setState({ filters });
+    }
+
+    onSearchSubmit = value => {
         // this.setState({ searchBarValue : e.target.value })
         this.setState({ loading: true })
         // llamar a endpoint para recibir lista de productos
@@ -77,7 +85,8 @@ class App extends React.Component {
         return (
             <>
                 <SearchBar loading={this.state.loading} value={this.state.searchBarValue} onSearchSubmit={this.onSearchSubmit}/>
-                <ProductList products={this.state.products}/>
+                <FilterBox onFilterByRating={this.onFilterByRating} />
+                <ProductList products={this.state.products} filters={this.state.filters}/>
             </>
         )
     }
