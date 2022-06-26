@@ -3,12 +3,15 @@ import '../App.css';
 
 import React from "react";
 import { BrowserRouter, Route } from 'react-router-dom';
-import { Container } from 'semantic-ui-react'
 
 import ProductList from './ProductList';
 import SearchBar from './SearchBar';
 import FilterBox from './FilterBox';
 import comercia from '../apis/comercia';
+import NavBar from './Footer';
+import ResponsiveContainer from './ResponsiveContainer';
+import Footer from './Footer';
+import ProductDetail from './ProductDetail';
 
 const products = [
     {
@@ -41,7 +44,9 @@ class App extends React.Component {
         this.state = {
             products: [],
             loading: false,
-            filters: {}
+            filters: {},
+            productSelectedId: null,
+            sections: [{ key: 'Inicio', content: 'Inicio', link: false }]
         }
     }
 
@@ -49,6 +54,16 @@ class App extends React.Component {
         const response = await comercia.get('/products');
         console.log(response);
     };
+
+    onSelectProduct = value => {
+        this.setState({ 
+            productSelectedId: value, 
+            sections: [
+                { key: 'Inicio', content: 'Inicio', link: true }, 
+                { key: 'Producto', content: 'Producto', link: false }
+            ] 
+        });
+    }
 
     onFilterByRating = value => {
         const filters = this.state.filters;
@@ -88,25 +103,39 @@ class App extends React.Component {
     }
 
     searchProducts = () => {
-        return (
-            <>
-                <SearchBar loading={this.state.loading} value={this.state.searchBarValue} onSearchSubmit={this.onSearchSubmit}/>
-                <FilterBox onFilterByRating={this.onFilterByRating} />
-                <ProductList products={this.state.products} filters={this.state.filters}/>
-            </>
-        )
+        if(this.state.productSelectedId === null) {
+            return (
+                <ResponsiveContainer>
+                    <SearchBar loading={this.state.loading} value={this.state.searchBarValue} onSearchSubmit={this.onSearchSubmit} />
+                    <FilterBox onFilterByRating={this.onFilterByRating} />
+                    <ProductList products={this.state.products} filters={this.state.filters} onSelectProduct={this.onSelectProduct} />
+                    <Footer />
+
+                    {this.state.sections}
+                </ResponsiveContainer>
+            )
+        } else {
+            const productSelected = this.state.products.find(product => product.id === this.state.productSelectedId);
+            return (
+                <ResponsiveContainer>
+                    <ProductDetail product={productSelected}/>
+                    <Footer />
+
+                    {this.state.sections}
+                </ResponsiveContainer>
+            )
+        }
+        
     }
 
     render() {
         this.getComerciaUsers();
         return (
-            <Container>
-                <BrowserRouter>
-                    <div>
-                        <Route path="/" exact component={this.searchProducts}/>
-                    </div>
-                </BrowserRouter>
-            </Container>
+            <BrowserRouter>
+                <div>
+                    <Route path="/" exact component={this.searchProducts}/>
+                </div>
+            </BrowserRouter>
         );
     }
     
