@@ -1,36 +1,11 @@
 import React from 'react';
 import { Segment, Image, Icon, Rating, Button, Comment, Form, Header } from 'semantic-ui-react';
 
-const getCommentComponent = comment => {
-    if(comment.replies.length == 0) {
-        return (
-            <Comment.Group>
-                <Comment>
-                    <Comment.Avatar src={comment.owner.profile_pic} />
-                    <Comment.Content>
-                        <Comment.Author as='a'>{comment.owner.name}</Comment.Author>
-                        <Comment.Metadata>
-                        <div>{comment.date}</div>
-                        </Comment.Metadata>
-                        <Comment.Text>{comment.content}</Comment.Text>
-                        <Comment.Actions>
-                        <Comment.Action>Reply</Comment.Action>
-                        </Comment.Actions>
-                    </Comment.Content>
-                </Comment>
-            </Comment.Group>
-        )   
-    } else {
-
-    }
-}
-
 const showComments = comments => {
-    console.log(comments);
-    return comments.map(comment => {
-        if(comment.replies.length == 0) {
+    return comments.map((comment, idx) => {
+        if(comment.replies.length === 0) {
             return (
-                <Comment.Group>
+                <Comment.Group key={idx}>
                     <Comment>
                         <Comment.Avatar src={comment.owner.profile_pic} />
                         <Comment.Content>
@@ -49,7 +24,7 @@ const showComments = comments => {
         } else {
             
             return (
-                <Comment.Group>
+                <Comment.Group key={idx}>
                 <Comment>
                     <Comment.Avatar src={comment.owner.profile_pic} />
                     <Comment.Content>

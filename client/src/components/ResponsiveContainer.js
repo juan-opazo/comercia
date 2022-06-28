@@ -4,6 +4,7 @@
 import { createMedia } from '@artsy/fresnel'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import {
   Breadcrumb,
   Button,
@@ -62,11 +63,17 @@ class DesktopContainer extends Component {
   hideFixedMenu = () => this.setState({ fixed: false })
   showFixedMenu = () => this.setState({ fixed: true })
 
+  componentDidMount() {
+    const utils = this.props.children[this.props.children.length - 1];
+    this.setState({ 
+      activeItem: utils.tabActive,
+    })
+  }
+
   render() {
     const children = [...this.props.children.slice(0, this.props.children.length - 1)];
     const { fixed } = this.state
-    
-    const sections = this.props.children[this.props.children.length - 1];
+    const utils = this.props.children[this.props.children.length - 1];
 
     return (
       <Media greaterThan='mobile'>
@@ -89,12 +96,24 @@ class DesktopContainer extends Component {
               size='large'
             >
               <Container>
-                <Menu.Item as='a' active>
-                  Home
-                </Menu.Item>
-                <Menu.Item as='a'>Work</Menu.Item>
-                <Menu.Item as='a'>Company</Menu.Item>
-                <Menu.Item as='a'>Careers</Menu.Item>
+                <Link to={'/'}>
+                  <Menu.Item 
+                    name='Inicio' 
+                    active={this.state.activeItem === 'Inicio'} 
+                    onClick={e => {utils.onNavBarItem(e); this.setState({ activeItem: 'Inicio' })}}>
+                    Inicio
+                  </Menu.Item>
+                </Link>
+                <Link to={'/mis-productos'}>
+                  <Menu.Item 
+                    name='Mis Productos' 
+                    active={this.state.activeItem === 'Mis Productos'} 
+                    onClick={e => {utils.onNavBarItem(e); this.setState({ activeItem: 'Mis Productos' })}}>
+                    Mis Productos
+                  </Menu.Item>
+                </Link>
+                {/* <Menu.Item as='a'>Company</Menu.Item>
+                <Menu.Item as='a'>Careers</Menu.Item> */}
                 <Menu.Item position='right'>
                   <Button as='a' inverted={!fixed}>
                     Ingresar
@@ -125,10 +144,19 @@ class MobileContainer extends Component {
 
   handleToggle = () => this.setState({ sidebarOpened: true })
 
+  componentDidMount() {
+    const utils = this.props.children[this.props.children.length - 1];
+    this.setState({ 
+      activeItem: utils.tabActive,
+    })
+  }
+
   render() {
     const children = [...this.props.children.slice(0, this.props.children.length - 1)];
     const { sidebarOpened } = this.state;
-    const sections = this.props.children[this.props.children.length - 1];
+    const utils = this.props.children[this.props.children.length - 1];
+    const sections = utils.sections;
+    const updateSections = utils.updateSections;
     return (
       <Media as={Sidebar.Pushable} at='mobile'>
         <Sidebar.Pushable>
@@ -140,10 +168,22 @@ class MobileContainer extends Component {
             vertical
             visible={sidebarOpened}
           >
-            <Menu.Item as='a' active>
-              Home
-            </Menu.Item>
-            <Menu.Item as='a'>Work</Menu.Item>
+            <Link to={'/'}>
+              <Menu.Item 
+                name='Inicio' 
+                active={this.state.activeItem === 'Inicio'} 
+                onClick={e => {utils.onNavBarItem(e); this.setState({ activeItem: 'Inicio' })}}>
+                Inicio
+              </Menu.Item>
+            </Link>
+            <Link to={'/mis-productos'}>
+              <Menu.Item 
+                name='Mis Productos' 
+                active={this.state.activeItem === 'Mis Productos'} 
+                onClick={e => {utils.onNavBarItem(e); this.setState({ activeItem: 'Mis Productos' })}}>
+                Mis Productos
+              </Menu.Item>
+            </Link>
             <Menu.Item as='a'>Company</Menu.Item>
             <Menu.Item as='a'>Careers</Menu.Item>
             <Menu.Item as='a'>Log in</Menu.Item>
@@ -174,7 +214,7 @@ class MobileContainer extends Component {
               </Container>
             </Segment>
 
-            <Breadcrumb icon='right angle' sections={sections} />
+            <Breadcrumb icon='right angle' sections={sections} onClick={e => updateSections(e)}/>
             {children}
           </Sidebar.Pusher>
         </Sidebar.Pushable>
