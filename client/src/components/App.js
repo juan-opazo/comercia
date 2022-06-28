@@ -85,7 +85,65 @@ class App extends React.Component {
                 description: "Hay promocion de docena de huevos en el metro de...",
                 rating: 3,
                 location: "https://www.google.com/maps/place/Metro/@-9.1198307,-78.5364452,16.34z/data=!4m12!1m6!3m5!1s0x91ab85cc856189c1:0xcfd7f8fa99fa7d1d!2splazaVea+Nuevo+Chimbote!8m2!3d-9.1264688!4d-78.5353347!3m4!1s0x0:0x35f6e1610439fe19!8m2!3d-9.1206335!4d-78.5352747",
-                image: "https://react.semantic-ui.com/images/avatar/large/daniel.jpg"
+                image: "https://react.semantic-ui.com/images/avatar/large/daniel.jpg",
+                comments: [
+                    {
+                        owner: {
+                            id: '1',
+                            profile_pic: 'https://react.semantic-ui.com/images/avatar/large/daniel.jpg',
+                            name: 'Matt'
+                        },
+                        date: '2022-6-27',
+                        content: 'Buen producto!',
+                        replies: [
+                            {
+                                owner: {
+                                    id: '1',
+                                    profile_pic: 'https://react.semantic-ui.com/images/avatar/large/daniel.jpg',
+                                    name: 'Matt'
+                                },
+                                date: '2022-6-27',
+                                content: 'Creanme pe',
+                                replies: [
+                                    {
+                                        owner: {
+                                            id: '2',
+                                            profile_pic: 'https://react.semantic-ui.com/images/avatar/large/elliot.jpg',
+                                            name: 'Paul'
+                                        },
+                                        date: '2022-6-28',
+                                        content: 'No te quiero creer pe loco',
+                                        replies: [
+                                            {
+                                                owner: {
+                                                    id: '1',
+                                                    profile_pic: 'https://react.semantic-ui.com/images/avatar/large/daniel.jpg',
+                                                    name: 'Matt'
+                                                },
+                                                date: '2022-6-28',
+                                                content: 'Que te den entonces!!!',
+                                                replies: [
+                                                    
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        owner: {
+                            id: '2',
+                            profile_pic: 'https://react.semantic-ui.com/images/avatar/large/elliot.jpg',
+                            name: 'Paul'
+                        },
+                        date: '2022-6-28',
+                        content: 'Haganle caso al pata de arriba gaaa',
+                        replies: []
+                    }
+
+                ]
             },
             {
                 id: '1234',
@@ -96,7 +154,8 @@ class App extends React.Component {
                 description: "Hay promocion de docena de huevos en plaza vea !!!!",
                 rating: 2,
                 location: "https://www.google.com/maps/place/plazaVea+Nuevo+Chimbote/@-9.1331244,-78.5376101,14.44z/data=!4m5!3m4!1s0x91ab85cc856189c1:0xcfd7f8fa99fa7d1d!8m2!3d-9.1264688!4d-78.5353347",
-                image: "https://react.semantic-ui.com/images/avatar/large/elliot.jpg"
+                image: "https://react.semantic-ui.com/images/avatar/large/elliot.jpg",
+                comments: []
             },
         ];
         this.setState({ products: response, loading: false })
