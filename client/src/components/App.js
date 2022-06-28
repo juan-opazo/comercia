@@ -13,30 +13,9 @@ import ResponsiveContainer from './ResponsiveContainer';
 import Footer from './Footer';
 import ProductDetail from './ProductDetail';
 
-const products = [
-    {
-        id: '123',
-        price: 12.4,
-        name: "Huevos Metro la Marina",
-        brand: "Marca A",
-        store: "Metro",
-        description: "Hay promocion de docena de huevos en el metro de...",
-        rating: 3,
-        location: "https://www.google.com/maps/place/Metro/@-9.1198307,-78.5364452,16.34z/data=!4m12!1m6!3m5!1s0x91ab85cc856189c1:0xcfd7f8fa99fa7d1d!2splazaVea+Nuevo+Chimbote!8m2!3d-9.1264688!4d-78.5353347!3m4!1s0x0:0x35f6e1610439fe19!8m2!3d-9.1206335!4d-78.5352747",
-        image: "https://react.semantic-ui.com/images/avatar/large/daniel.jpg"
-    },
-    {
-        id: '1234',
-        price: 20.5,
-        name: "Huevos Plaza Vea",
-        brand: "Marca B",
-        store: "Plaza Vea",
-        description: "Hay promocion de docena de huevos en plaza vea !!!!",
-        rating: 2,
-        location: "https://www.google.com/maps/place/plazaVea+Nuevo+Chimbote/@-9.1331244,-78.5376101,14.44z/data=!4m5!3m4!1s0x91ab85cc856189c1:0xcfd7f8fa99fa7d1d!8m2!3d-9.1264688!4d-78.5353347",
-        image: "https://react.semantic-ui.com/images/avatar/large/elliot.jpg"
-    },
-];
+const HOME = 'Inicio';
+const PRODUCT = 'Producto';
+const MY_PRODUCTS = 'Mis Productos';
 
 class App extends React.Component {
     constructor(props) {
@@ -46,7 +25,8 @@ class App extends React.Component {
             loading: false,
             filters: {},
             productSelectedId: null,
-            sections: [{ key: 'Inicio', content: 'Inicio', link: false }]
+            sections: [{ key: HOME, content: HOME, link: false }],
+            tabActive: HOME
         }
     }
 
@@ -55,12 +35,39 @@ class App extends React.Component {
         console.log(response);
     };
 
+    updateSections = e => {
+        if(e.target.textContent == HOME) {
+            this.setState({ 
+                sections: [{ key: HOME, content: HOME, link: false }],
+                productSelectedId: null
+            })
+        }
+    }
+
+    onNavBarItem = e => {
+        switch (e.target.textContent) {
+            case HOME:
+                this.setState({ 
+                    sections: [{ key: HOME, content: HOME, link: false }],
+                    productSelectedId: null,
+                    tabActive: HOME
+                });
+                break;
+            case MY_PRODUCTS:
+                this.setState({
+                    tabActive: MY_PRODUCTS
+                });
+            default:
+                break;
+        }
+    }
+
     onSelectProduct = value => {
         this.setState({ 
             productSelectedId: value, 
             sections: [
-                { key: 'Inicio', content: 'Inicio', link: true }, 
-                { key: 'Producto', content: 'Producto', link: false }
+                { key: HOME, content: HOME, link: true }, 
+                { key: PRODUCT, content: PRODUCT, link: false }
             ] 
         });
     }
@@ -85,7 +92,65 @@ class App extends React.Component {
                 description: "Hay promocion de docena de huevos en el metro de...",
                 rating: 3,
                 location: "https://www.google.com/maps/place/Metro/@-9.1198307,-78.5364452,16.34z/data=!4m12!1m6!3m5!1s0x91ab85cc856189c1:0xcfd7f8fa99fa7d1d!2splazaVea+Nuevo+Chimbote!8m2!3d-9.1264688!4d-78.5353347!3m4!1s0x0:0x35f6e1610439fe19!8m2!3d-9.1206335!4d-78.5352747",
-                image: "https://react.semantic-ui.com/images/avatar/large/daniel.jpg"
+                image: "https://react.semantic-ui.com/images/avatar/large/daniel.jpg",
+                comments: [
+                    {
+                        owner: {
+                            id: '1',
+                            profile_pic: 'https://react.semantic-ui.com/images/avatar/large/daniel.jpg',
+                            name: 'Matt'
+                        },
+                        date: '2022-6-27',
+                        content: 'Buen producto!',
+                        replies: [
+                            {
+                                owner: {
+                                    id: '1',
+                                    profile_pic: 'https://react.semantic-ui.com/images/avatar/large/daniel.jpg',
+                                    name: 'Matt'
+                                },
+                                date: '2022-6-27',
+                                content: 'Creanme pe',
+                                replies: [
+                                    {
+                                        owner: {
+                                            id: '2',
+                                            profile_pic: 'https://react.semantic-ui.com/images/avatar/large/elliot.jpg',
+                                            name: 'Paul'
+                                        },
+                                        date: '2022-6-28',
+                                        content: 'No te quiero creer pe loco',
+                                        replies: [
+                                            {
+                                                owner: {
+                                                    id: '1',
+                                                    profile_pic: 'https://react.semantic-ui.com/images/avatar/large/daniel.jpg',
+                                                    name: 'Matt'
+                                                },
+                                                date: '2022-6-28',
+                                                content: 'Que te den entonces!!!',
+                                                replies: [
+                                                    
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        owner: {
+                            id: '2',
+                            profile_pic: 'https://react.semantic-ui.com/images/avatar/large/elliot.jpg',
+                            name: 'Paul'
+                        },
+                        date: '2022-6-28',
+                        content: 'Haganle caso al pata de arriba gaaa',
+                        replies: []
+                    }
+
+                ]
             },
             {
                 id: '1234',
@@ -96,13 +161,37 @@ class App extends React.Component {
                 description: "Hay promocion de docena de huevos en plaza vea !!!!",
                 rating: 2,
                 location: "https://www.google.com/maps/place/plazaVea+Nuevo+Chimbote/@-9.1331244,-78.5376101,14.44z/data=!4m5!3m4!1s0x91ab85cc856189c1:0xcfd7f8fa99fa7d1d!8m2!3d-9.1264688!4d-78.5353347",
-                image: "https://react.semantic-ui.com/images/avatar/large/elliot.jpg"
+                image: "https://react.semantic-ui.com/images/avatar/large/elliot.jpg",
+                comments: []
             },
         ];
         this.setState({ products: response, loading: false })
     }
 
+    myProducts = () => {
+        const utils = {
+            sections: this.state.sections,
+            tabActive: this.state.tabActive,
+            updateSections: this.updateSections,
+            onNavBarItem: this.onNavBarItem
+        }
+        return (
+            <ResponsiveContainer>
+                    <Footer />
+
+                    {utils}
+                    
+                </ResponsiveContainer>
+        )
+    }
+
     searchProducts = () => {
+        const utils = {
+            sections: this.state.sections,
+            tabActive: this.state.tabActive,
+            updateSections: this.updateSections,
+            onNavBarItem: this.onNavBarItem
+        }
         if(this.state.productSelectedId === null) {
             return (
                 <ResponsiveContainer>
@@ -111,7 +200,8 @@ class App extends React.Component {
                     <ProductList products={this.state.products} filters={this.state.filters} onSelectProduct={this.onSelectProduct} />
                     <Footer />
 
-                    {this.state.sections}
+                    {utils}
+                    
                 </ResponsiveContainer>
             )
         } else {
@@ -121,7 +211,8 @@ class App extends React.Component {
                     <ProductDetail product={productSelected}/>
                     <Footer />
 
-                    {this.state.sections}
+                    {utils}
+                    
                 </ResponsiveContainer>
             )
         }
@@ -129,11 +220,12 @@ class App extends React.Component {
     }
 
     render() {
-        this.getComerciaUsers();
+        // this.getComerciaUsers();
         return (
             <BrowserRouter>
                 <div>
                     <Route path="/" exact component={this.searchProducts}/>
+                    <Route path="/mis-productos" exact component={this.myProducts}/>
                 </div>
             </BrowserRouter>
         );
