@@ -26,7 +26,8 @@ class App extends React.Component {
             filters: {},
             productSelectedId: null,
             sections: [{ key: HOME, content: HOME, link: false }],
-            tabActive: HOME
+            tabActive: HOME,
+            isAuthenticated: false,
         }
     }
 
@@ -172,8 +173,9 @@ class App extends React.Component {
         const utils = {
             sections: this.state.sections,
             tabActive: this.state.tabActive,
+            isAuthenticated: this.state.isAuthenticated,
             updateSections: this.updateSections,
-            onNavBarItem: this.onNavBarItem
+            onNavBarItem: this.onNavBarItem,
         }
         return (
             <ResponsiveContainer>
@@ -189,6 +191,7 @@ class App extends React.Component {
         const utils = {
             sections: this.state.sections,
             tabActive: this.state.tabActive,
+            isAuthenticated: this.state.isAuthenticated,
             updateSections: this.updateSections,
             onNavBarItem: this.onNavBarItem
         }
