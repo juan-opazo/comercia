@@ -19,7 +19,9 @@ import {
   Segment,
   Sidebar,
   Visibility,
+  Modal,
 } from 'semantic-ui-react'
+import LoginForm from './LoginForm'
 
 const { MediaContextProvider, Media } = createMedia({
   breakpoints: {
@@ -67,6 +69,8 @@ class DesktopContainer extends Component {
     const utils = this.props.children[this.props.children.length - 1];
     this.setState({ 
       activeItem: utils.tabActive,
+      open: false,
+      dimmer: undefined
     })
   }
 
@@ -115,9 +119,43 @@ class DesktopContainer extends Component {
                 {/* <Menu.Item as='a'>Company</Menu.Item>
                 <Menu.Item as='a'>Careers</Menu.Item> */}
                 <Menu.Item position='right'>
-                  <Button as='a' inverted={!fixed}>
+                  {/* <Button as='a' inverted={!fixed}>
                     Ingresar
-                  </Button>
+                  </Button> */}
+                  <Modal
+                    onClose={() => this.setState({ open: false, dimmer: undefined })}
+                    onOpen={() => this.setState({ open: true, dimmer: 'blurring' })}
+                    open={this.state.open}
+                    trigger={
+                      <Button as='a' inverted={!fixed}>
+                        Ingresar
+                      </Button>
+                    }
+                    dimmer={this.state.dimmer}
+                  >
+                    {/* <Modal.Header>Select a Photo</Modal.Header> */}
+                    <Modal.Content image>
+                      <div className='flex-container horizontal around max-width'>
+                        <Image size='medium' src='https://react.semantic-ui.com/images/avatar/large/rachel.png' wrapped />
+                        <Modal.Description>
+                            <LoginForm />
+                        </Modal.Description>
+                      </div>
+                      
+                    </Modal.Content>
+                    {/* <Modal.Actions>
+                      <Button color='black' onClick={() => this.setState({ open: false })}>
+                        Nope
+                      </Button>
+                      <Button
+                        content="Yep, that's me"
+                        labelPosition='right'
+                        icon='checkmark'
+                        onClick={() => this.setState({ open: false })}
+                        positive
+                      />
+                    </Modal.Actions> */}
+                  </Modal>
                   <Button as='a' inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }}>
                     Registrarse
                   </Button>
@@ -148,6 +186,8 @@ class MobileContainer extends Component {
     const utils = this.props.children[this.props.children.length - 1];
     this.setState({ 
       activeItem: utils.tabActive,
+      open: false,
+      dimmer: undefined
     })
   }
 
@@ -184,10 +224,6 @@ class MobileContainer extends Component {
                 Mis Productos
               </Menu.Item>
             </Link>
-            <Menu.Item as='a'>Company</Menu.Item>
-            <Menu.Item as='a'>Careers</Menu.Item>
-            <Menu.Item as='a'>Log in</Menu.Item>
-            <Menu.Item as='a'>Sign Up</Menu.Item>
           </Sidebar>
 
           <Sidebar.Pusher dimmed={sidebarOpened}>
@@ -203,9 +239,39 @@ class MobileContainer extends Component {
                     <Icon name='sidebar' />
                   </Menu.Item>
                   <Menu.Item position='right'>
-                    <Button as='a' inverted>
-                      Ingresar
-                    </Button>
+                  <Modal
+                    onClose={() => this.setState({ open: false, dimmer: undefined })}
+                    onOpen={() => this.setState({ open: true, dimmer: 'blurring' })}
+                    open={this.state.open}
+                    trigger={
+                      <Button as='a' inverted>
+                        Ingresar
+                      </Button>
+                    }
+                    dimmer={this.state.dimmer}
+                  >
+                    {/* <Modal.Header>Select a Photo</Modal.Header> */}
+                    <Modal.Content image>
+                      <div className='flex-container horizontal max-width'>
+                        <Modal.Description>
+                            <LoginForm />
+                        </Modal.Description>
+                      </div>
+                      
+                    </Modal.Content>
+                    {/* <Modal.Actions>
+                      <Button color='black' onClick={() => this.setState({ open: false })}>
+                        Nope
+                      </Button>
+                      <Button
+                        content="Yep, that's me"
+                        labelPosition='right'
+                        icon='checkmark'
+                        onClick={() => this.setState({ open: false })}
+                        positive
+                      />
+                    </Modal.Actions> */}
+                  </Modal>
                     <Button as='a' inverted style={{ marginLeft: '0.5em' }}>
                       Registrarse
                     </Button>
