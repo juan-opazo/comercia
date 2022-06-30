@@ -1,1 +1,10 @@
 .venv
+
+# data_db content
+data_db/
+
+# migrations
+comercia/products/**/migrations/**
+!comercia/products/**/migrations/__init__.py
+comercia/products/migrations/**
+!comercia/products/migrations/__init__.py
