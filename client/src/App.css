@@ -5,11 +5,40 @@
     padding: 2em 0;
 }
 
-.flex-container, .small-padding {
-    padding: 1em 0;
+.flex-container.horizontal{
+    flex-direction: row;
+    justify-content: center;
+}
+
+.flex-container.wrap{
+    flex-flow: wrap;
+}
+
+.flex-container.around {
+    justify-content: space-around;
+}
+
+.flex-container.between {
+    justify-content: space-between;
+}
+
+.flex-container.small-padding {
+    padding: 1em;
 }
 
 .card-extra-container {
     display: flex;
     justify-content: space-around;
+}
+
+.breadcrumb {
+    padding: 0 1em;
+}
+
+.margin-0 {
+    margin: 0;
+}
+
+.max-width {
+    width: 100%;
 }
