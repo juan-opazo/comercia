@@ -1,0 +1,109 @@
+version: '2.3'
+
+services:
+
+  postgres:
+    image: mdillon/postgis:9.6
+    env_file:
+      - ./server/.env/.local
+
+  redis_db:
+    image: redis:3.2.8
+    volumes:
+    - ./data_db/redis:/data
+    command: redis-server --appendonly yes
+    restart: always
+    ports:
+      - "6379:6379"
+
+  server:
+    image: comercia/server:last
+    build:
+      context: ./server
+      dockerfile: ./compose/Dockerfile
+    command: >
+      bash -c "python wait_for_postgres.py &&
+               python manage.py migrate &&
+               python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./server/:/code
+    environment:
+      - DJANGO_SETTINGS_MODULE=server.config.local
+    env_file:
+      - ./server/.env/.local
+    ports:
+      - "8000:8000"
+    restart: always
+    depends_on:
+      - postgres
+      - redis_db
+
+  celeryworker:
+    image: comercia/server:last
+    command: celery -A server.taskapp worker -l info
+    environment:
+      - DJANGO_SETTINGS_MODULE=server.config.local
+    volumes:
+      - ./server/:/code
+    env_file:
+      - ./server/.env/.local
+    restart: always
+    depends_on:
+      - redis_db
+
+  celerybeat:
+    image: comercia/server:last
+    command: bash celerybeat_start.sh
+    environment:
+      - DJANGO_SETTINGS_MODULE=server.config.local
+    volumes:
+      - ./server/:/code
+    env_file:
+      - ./server/.env/.local
+    restart: always
+    depends_on:
+      - redis_db
+
+  flower:
+    image: comercia/server:last
+    command: bash flower_start.sh
+    volumes:
+      - ./server/:/code
+    env_file:
+      - ./server/.env/.local
+    ports:
+      - "7000:7000"
+    restart: always
+    depends_on:
+      - redis_db
+
+  client:
+    restart: always
+    image: local-client
+    build:
+     context: ./client
+     dockerfile: ./compose/Dockerfile
+    environment:
+      - NUXT_HOST=0.0.0.0
+      - NUXT_PORT=3000
+    env_file:
+      - ./client/env/.local
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/code
+      - /code/node_modules
+    command: "yarn start"
+    depends_on:
+      - server
+
+  # documentation:
+  #   restart: always
+  #   build:
+  #     context: ./docs
+  #     dockerfile: Dockerfile
+  #   command: "mkdocs serve"
+  #   volumes:
+  #     - ./:/code
+  #   ports:
+  #     - "8001:8001"
