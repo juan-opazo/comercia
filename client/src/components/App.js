@@ -12,6 +12,7 @@ import NavBar from './Footer';
 import ResponsiveContainer from './ResponsiveContainer';
 import Footer from './Footer';
 import ProductDetail from './ProductDetail';
+import GoogleAuth from './GoogleAuth';
 
 const HOME = 'Inicio';
 const PRODUCT = 'Producto';
@@ -196,9 +197,11 @@ class App extends React.Component {
             onNavBarItem: this.onNavBarItem
         }
         if(this.state.productSelectedId === null) {
+            console.log(this.props);
             return (
                 <ResponsiveContainer>
                     <SearchBar loading={this.state.loading} value={this.state.searchBarValue} onSearchSubmit={this.onSearchSubmit} />
+                    {/* <GoogleAuth/> */}
                     <FilterBox onFilterByRating={this.onFilterByRating} />
                     <ProductList products={this.state.products} filters={this.state.filters} onSelectProduct={this.onSelectProduct} />
                     <Footer />
