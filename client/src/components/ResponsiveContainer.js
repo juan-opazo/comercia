@@ -120,6 +120,14 @@ class DesktopContainer extends Component {
                 </Link>
                 {/* <Menu.Item as='a'>Company</Menu.Item>
                 <Menu.Item as='a'>Careers</Menu.Item> */}
+                <Link to={'/tendencias'}>
+                  <Menu.Item 
+                    name='Tendencias' 
+                    active={this.state.activeItem === 'Tendencias'} 
+                    onClick={e => {utils.onNavBarItem(e); this.setState({ activeItem: 'Tendencias' })}}>
+                    Tendencias
+                  </Menu.Item>
+                </Link>
                 <Menu.Item position='right'>
                   {/* <Button as='a' inverted={!fixed}>
                     Ingresar
@@ -242,6 +250,14 @@ class MobileContainer extends Component {
                 active={this.state.activeItem === 'Mis Productos'} 
                 onClick={e => {utils.onNavBarItem(e); this.setState({ activeItem: 'Mis Productos' })}}>
                 Mis Productos
+              </Menu.Item>
+            </Link>
+            <Link to={'/tendencias'}>
+              <Menu.Item 
+                name='Tendencias' 
+                active={this.state.activeItem === 'Tendencias'} 
+                onClick={e => {utils.onNavBarItem(e); this.setState({ activeItem: 'Tendencias' })}}>
+                Tendencias
               </Menu.Item>
             </Link>
           </Sidebar>

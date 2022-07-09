@@ -8,7 +8,7 @@ class GoogleAuth extends React.Component {
     componentDidMount() {
         window.gapi.load('client:auth2', () => {
             window.gapi.client.init({ 
-                clientId: '59821523779-94fbg14eebnh4pt04dgla5qp87s5oqm7.apps.googleusercontent.com',
+                clientId: '',
                 scope: 'email',
                 plugin_name: 'comercia-dev',
             }).then(() => {
@@ -32,26 +32,31 @@ class GoogleAuth extends React.Component {
     onSignOut = () => this.auth.signOut();
 
     renderAuthButton() {
-        if (this.props.isSignedIn === null) console.log('waiting...')
-        else if (this.props.isSignedIn) this.onSignOut()
-        else this.onSignIn()
-    }
-
-    render() {
+        // if (this.props.isSignedIn === null) {
+        //     return null;
+        // } else 
         if (this.props.isSignedIn) {
             return (
                 <Button color='google plus' fluid size='large' onClick={this.onSignOut}>
                     <Icon name='google' /> Log Out 
                 </Button>
-                // <div>{this.renderAuthButton()}</div>
-            )
+            );
         } else {
             return (
                 <Button color='google plus' fluid size='large' onClick={this.onSignIn}>
                     <Icon name='google' /> Continuar con Google
                 </Button>
-            )
+            );
         }
+        // if (this.props.isSignedIn === null) console.log('waiting...')
+        // else if (this.props.isSignedIn) this.onSignOut()
+        // else this.onSignIn()
+    }
+
+    render() {
+        return (
+            <div>{this.renderAuthButton()}</div>
+        )
         
     }
 }
