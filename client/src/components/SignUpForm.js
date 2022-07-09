@@ -1,11 +1,8 @@
 import React from 'react'
 import { Button, Form, Grid, Header, Image, Message, Segment, Icon } from 'semantic-ui-react'
-import GoogleAuth from './GoogleAuth';
 
-const LoginForm = () => {
-    const [isAuthenticated, setIsAuthenticated] = React.useState(false);
-
-    if (isAuthenticated) return <></>
+const SignUpForm = () => {
+    const [open, setOpen] = React.useState(false);
     return (
         <>
         <Header as='h2' color='teal' textAlign='center'>
@@ -23,18 +20,19 @@ const LoginForm = () => {
         />
 
         <Button color='blue' fluid size='large'>
-            Iniciar
+            Registrarse
         </Button>
         <br/>
-        
-        <GoogleAuth setIsAuthenticated={setIsAuthenticated}/>
+        <Button color='google plus' fluid size='large'>
+            <Icon name='google' /> Continuar con Google
+        </Button>
         </Segment>
     </Form>
     <Message>
-        Aun no tienes cuenta? <a href='#'>Crealo aqui</a>
+        Ya tienes cuenta? <a href='#'>Ingresa aqui</a>
     </Message>
     </>
     )
 }
 
-export default LoginForm
+export default SignUpForm
