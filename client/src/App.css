@@ -39,6 +39,15 @@
     padding: 0 1em;
 }
 
+.upload-image > img:hover {
+    cursor: pointer;
+    filter: brightness(0.7);
+    
+}
+.upload-image > img:active {
+    transform: scale(1.05,1.05);
+}
+
 .margin-0 {
     margin: 0;
 }

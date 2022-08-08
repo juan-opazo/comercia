@@ -21,13 +21,13 @@ const showProducts = (products) => {
     )
 }
 
-const MyProducts = ({ products }) => {
+const MyProducts = ({ products, userPosition }) => {
     return (
         <div className='flex-container wrap center padding-1'>
             <Item.Group>
                 {showProducts(products)}
                 <div className='flex-container center'>
-                    <NewProductForm/>
+                    <NewProductForm userPosition={userPosition}/>
                 </div>
                 
             </Item.Group>
