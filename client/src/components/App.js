@@ -2,7 +2,7 @@ import 'semantic-ui-css/semantic.min.css';
 import '../App.css';
 
 import React from "react";
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
 import ProductList from './ProductList';
 import SearchBar from './SearchBar';
@@ -32,6 +32,10 @@ class App extends React.Component {
             userPosition: {
                 latitude: null,
                 longitude: null,
+                address: null, 
+                city: null, 
+                state: null, 
+                country: null
             },
             
         }
@@ -49,7 +53,7 @@ class App extends React.Component {
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude,
                     }
-                })
+                });
             })
         }
         // get user products from backend
@@ -288,7 +292,7 @@ class App extends React.Component {
         }
         return (
             <ResponsiveContainer>
-                    <MyProducts products={this.state.myProducts}/>
+                    <MyProducts products={this.state.myProducts} userPosition={this.state.userPosition}/>
                     <Footer />
 
                     {utils}
@@ -358,9 +362,13 @@ class App extends React.Component {
         return (
             <BrowserRouter>
                 <div>
-                    <Route path="/" exact component={this.searchProducts}/>
-                    <Route path="/mis-productos" exact component={this.myProducts}/>
-                    <Route path="*" component={this.notFound} />
+                    <Switch>
+                        <Route path="/" exact component={this.searchProducts}/>
+                        <Route path="/mis-productos" exact component={this.myProducts}/>
+                        <Route path="/404" exact component={this.notFound} />
+                        <Redirect to="/404"/>
+                    </Switch>
+                    
                 </div>
             </BrowserRouter>
         );
