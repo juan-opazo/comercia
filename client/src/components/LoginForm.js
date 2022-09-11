@@ -1,8 +1,9 @@
 import React from 'react'
+import { connect } from 'react-redux';
 import { Button, Form, Grid, Header, Image, Message, Segment, Icon } from 'semantic-ui-react'
 import GoogleAuth from './GoogleAuth';
 
-const LoginForm = () => {
+const LoginForm = (props) => {
     const [isAuthenticated, setIsAuthenticated] = React.useState(false);
 
     if (isAuthenticated) return <></>
@@ -27,7 +28,10 @@ const LoginForm = () => {
         </Button>
         <br/>
         
-        <GoogleAuth setIsAuthenticated={setIsAuthenticated}/>
+        {/* <GoogleAuth setIsAuthenticated={setIsAuthenticated}/> */}
+        <Button color='google plus' fluid size='large' href="/auth/google">
+            <Icon name='google' /> Continuar con Google
+        </Button>
         </Segment>
     </Form>
     <Message>
@@ -35,6 +39,12 @@ const LoginForm = () => {
     </Message>
     </>
     )
+};
+
+const mapStateToProps = ({ auth }) => {
+    return { auth };
 }
 
-export default LoginForm
+export default connect(
+    mapStateToProps
+)(LoginForm)

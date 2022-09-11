@@ -1,5 +1,5 @@
 # Frontend connection
-FRONTEND_URL=http://127.0.0.1:3000
+FRONTEND_URL=http://127.0.0.1:80
 
 # Backend connection
 API_URL=http://web:8000

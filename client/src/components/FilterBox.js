@@ -1,5 +1,5 @@
 import React from 'react'
-import { Accordion, Container, Icon, Rating } from 'semantic-ui-react'
+import { Accordion, Container, Icon, Rating, Label } from 'semantic-ui-react'
 
 class FilterBox extends React.Component {
     constructor(props) {
@@ -41,7 +41,7 @@ class FilterBox extends React.Component {
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 0}>
                     <Container textAlign='center'>
-                        <Rating icon='heart' defaultRating={this.state.rating} maxRating={3} onRate={this.handleRate} size="massive" clearable/>
+                        
                     </Container>
                     
                 </Accordion.Content>

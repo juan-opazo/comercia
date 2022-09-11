@@ -1,36 +1,26 @@
 import React from 'react';
 import { Search } from 'semantic-ui-react'
 
-class SearchBar extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            term: ''
-        };
-    }
+const SearchBar = (props) => {
+    const [term, setTerm] = React.useState('');
 
-    onFormSubmit = (event) => {
+    const onFormSubmit = (event) => {
         event.preventDefault();
-        this.props.onSearchSubmit(this.state.term);
+        setTerm(event.target.value);
+        props.onSearchSubmit(event.target.value);
     }
 
-    render() {
-        return (
-            <div className='flex-container small-padding'>
-                <form onSubmit={this.onFormSubmit}>
-                    <Search
-                        loading={this.props.loading}
-                        placeholder='Buscar producto...'
-                        onSearchChange={e => this.setState({ term: e.target.value })}
-                        value={this.state.term}
-                        showNoResults={false}
-                    />
-                </form>
-                
-            </div>
-        );
-    }
-    
+    return (
+        <div className='flex-container small-padding'>
+            <Search
+                loading={false}
+                placeholder='Buscar producto...'
+                onSearchChange={e => onFormSubmit(e)}
+                value={term}
+                showNoResults={false}
+            />
+        </div>
+    );
 }
 
 export default SearchBar;

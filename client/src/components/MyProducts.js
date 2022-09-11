@@ -1,38 +1,46 @@
 import _ from 'lodash'
 import React from 'react'
-import { Grid, Image, Item, Icon, Button } from 'semantic-ui-react'
+import { connect } from 'react-redux';
+import { Label, Image, Transition, Icon, Button } from 'semantic-ui-react'
 import NewProductForm from './NewProductForm'
+import NumberOfComments from './NumberOfComments'
+import ProductCard from './ProductCard'
+import Rating from './Rating'
 
 const paragraph = <Image src='https://react.semantic-ui.com/images/wireframe/short-paragraph.png' />
 
-const showProducts = (products) => {
+const showProducts = (products, onSelectProduct) => {
+    if (!products) return
     return products.map(product => 
-        <Item key={product.id} onClick={() => console.log(product)}>
-        <Item.Image size='small' src={product.image} />
-
-        <Item.Content>
-            <Item.Header as='a'>{product.name}</Item.Header>
-            <Item.Description>{product.description}</Item.Description>
-            <Item.Extra>
-            <Icon color='red' name='heart' /> 121
-            </Item.Extra>
-        </Item.Content>
-        </Item>
+        <div className='flex-container center width-30 min-width-300 margin-1 ' key={product._id} >
+            <ProductCard product={product} onSelectProduct={onSelectProduct}/>
+        </div>
     )
 }
 
-const MyProducts = ({ products, userPosition }) => {
+const MyProducts = ({ products, auth, userPosition, onSelectProduct, syncProducts }) => {
+    if (!products || !auth) return <></>
+    products = products.filter(product => product.created_by === auth._id)
     return (
         <div className='flex-container wrap center padding-1'>
-            <Item.Group>
-                {showProducts(products)}
-                <div className='flex-container center'>
-                    <NewProductForm userPosition={userPosition}/>
-                </div>
+            <Transition.Group animation={'fly up'} duration={500}>
+                {true && (
+                    <>
+                        {showProducts(products, onSelectProduct)}
+                        <div className='flex-container center width-80'>
+                            <NewProductForm userPosition={userPosition} syncProducts={syncProducts}/>
+                        </div>
+                    </>
+                )}
+            </Transition.Group>
                 
-            </Item.Group>
         </div>
+        
     );
 }
 
-export default MyProducts
+const mapStateToProps = ({ auth, products }) => {
+    return { auth, products };
+  }
+
+export default connect(mapStateToProps)(MyProducts);

@@ -1,5 +1,6 @@
-// import React from 'react';
-// import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
+import React from 'react';
+import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
+import { connect } from 'react-redux';
 // import Geocode from "react-geocode";
 
 // // Geocode.setApiKey("");
@@ -77,69 +78,68 @@
 //     return { lat: null, lng: null };
 // }
 
-// const getLocationMarker = (props) => {
-//     if (props.address == '') return <></>
-
-//     const { lat, lng } = getCoords(props);
-//     if (lat !== null) {
-//         return <Marker
-//         key={'userMarker'}
-//         position={getCoords(props)}
-//         icon={{
-//             url: 'https://react.semantic-ui.com/images/avatar/large/daniel.jpg',
-//             scaledSize: {
-//                 width: 40,
-//                 height: 40,
-//             },
-//         }}
-//       />
-//     } else return <></>
+const getLocationMarker = ({ lat, lng }) => {
+    if (lat !== null) {
+        return <Marker
+        key={'userMarker'}
+        position={{ lat, lng }}
+        icon={{
+            url: 'https://react.semantic-ui.com/images/avatar/large/daniel.jpg',
+            scaledSize: {
+                width: 40,
+                height: 40,
+            },
+        }}
+      />
+    } else return <></>
     
-// }
+}
 
-// const containerStyle = {
-//     width: '400px',
-//     height: '400px'
-// };
+const containerStyle = {
+    width: '60vw',
+    height: '400px'
+};
   
-// const center = {
-//     lat: -3.745,
-//     lng: -38.523
-// };
+const LocationSelector = ({ lat, lng }) => {
+  if (!lat) return <></>;
   
-//   const LocationSelector = (props) => {
+  const center = { lat, lng };
 
-//     const { isLoaded } = useJsApiLoader({
-//       id: 'google-map-script',
-//       googleMapsApiKey: "AIzaSyArrmZomwzcEXVw9j7Z-AgffwjLbTUI5t4"
-//     })
-  
-//     const [map, setMap] = React.useState(null)
-  
-//     const onLoad = React.useCallback(function callback(map) {
-//       const bounds = new window.google.maps.LatLngBounds(center);
-//       map.fitBounds(bounds);
-//       setMap(map)
-//     }, [])
-  
-//     const onUnmount = React.useCallback(function callback(map) {
-//       setMap(null)
-//     }, [])
-  
-//     return isLoaded ? (
-//         <GoogleMap
-//           mapContainerStyle={containerStyle}
-//           center={center}
-//           zoom={10}
-//           onLoad={onLoad}
-//           onUnmount={onUnmount}
-//         >
-//           { /* Child components, such as markers, info windows, etc. */ }
-//           {getLocationMarker(props)}
-          
-//           <></>
-//         </GoogleMap>
-//     ) : <></>
-//   }
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: "AIzaSyArrmZomwzcEXVw9j7Z-AgffwjLbTUI5t4"
+  })
 
-// export default LocationSelector;
+  const [map, setMap] = React.useState(null)
+
+  const onLoad = React.useCallback(function callback(map) {
+    const bounds = new window.google.maps.LatLngBounds(center);
+    map.fitBounds(bounds);
+    setMap(map)
+  }, [])
+
+  const onUnmount = React.useCallback(function callback(map) {
+    setMap(null)
+  }, [])
+
+  return isLoaded ? (
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={center}
+        zoom={0.1}
+        onLoad={onLoad}
+        onUnmount={onUnmount}
+      >
+        { /* Child components, such as markers, info windows, etc. */ }
+        {getLocationMarker({ lat, lng })}
+        
+        <></>
+      </GoogleMap>
+  ) : <></>
+  }
+
+  const mapStateToProps = ({ auth }) => {
+    return { auth };
+}
+
+export default connect(mapStateToProps)(LocationSelector);

@@ -1,3 +1,30 @@
+@import "~react-image-gallery/styles/css/image-gallery.css";
+h3 {
+    margin: 0;
+}
+
+/* CHANGES TO REACT-IMAGE-GALLERY CSS IN ORDER TO FIT IMAGE GALLERY INTO MOBILE WIDTH */
+
+.image-gallery {
+    width: 80vw;
+    height: auto;
+}
+
+.image-gallery-slide img {
+    width: 100%;
+    height: auto;
+    max-height: 80vh;
+    object-fit: cover;
+    overflow: hidden;
+    object-position: center center;
+}
+
+.fullscreen .image-gallery-slide img {
+    max-height: 100vh;
+}
+
+/* CSS FOR INTERNAL COMPONENTS */
+
 .flex-container {
     display: flex;
     flex-direction: column;
@@ -52,10 +79,70 @@
     margin: 0;
 }
 
+.margin-0_5 {
+    margin: 0.5em;
+}
+
+.margin-1 {
+    margin: 1em;
+}
+
+.padding-0 {
+    padding: 0;
+}
+
+.padding-0_5 {
+    padding: 0.5em;
+}
+
 .padding-1 {
     padding: 1em;
 }
 
+.padding-horizontal-1 {
+    padding: 0 1em;
+}
+
 .max-width {
     width: 100%;
+}
+
+.width-85vw {
+    width: 85vw;
+}
+
+.width-100 {
+    width: 100%;
+}
+
+.width-85 {
+    width: 85%;
+}
+
+.width-80 {
+    width: 80%;
+}
+
+.width-50 {
+    width: 50%;
+}
+
+.width-30 {
+    width: 30%;
+}
+
+.min-width-300 {
+    min-width: 300px;
+}
+
+.margin-top-1 {
+    margin-top: 1em;
+}
+
+.margin-top-0_5 {
+    margin-top: 0.5em;
+}
+
+.clickable {
+    cursor: pointer;
 }

@@ -4,6 +4,7 @@
 import { createMedia } from '@artsy/fresnel'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import {
   Breadcrumb,
@@ -76,11 +77,77 @@ class DesktopContainer extends Component {
     })
   }
 
+  renderUserSection(fixed, auth) {
+    if (auth === null) {
+      return 
+    }
+    if (auth) {
+      return (
+        <div>
+          <Image src={auth.photos[0].value} alt={auth.name.givenName} avatar/>
+          <a href="/api/logout"><Icon name='log out' size='small' className='padding-1'/></a>
+        </div>
+      )
+    }
+    return (
+      <>
+      <Button as='a' inverted={!fixed} href="/auth/google">
+        Ingresar
+      </Button>
+        {/* <Modal
+          onClose={() => this.setState({ openLogin: false, dimmer: undefined })}
+          onOpen={() => this.setState({ openLogin: true, dimmer: 'blurring' })}
+          open={this.state.openLogin}
+          trigger={
+            <Button as='a' inverted={!fixed} >
+              Ingresar
+            </Button>
+          }
+          dimmer={this.state.dimmer}
+        >
+          <Modal.Content image>
+            <div className='flex-container horizontal around max-width'>
+              <Image size='medium' src='https://react.semantic-ui.com/images/avatar/large/rachel.png' wrapped />
+              <Modal.Description>
+                  <LoginForm />
+              </Modal.Description>
+            </div>
+            
+          </Modal.Content>
+        </Modal> */}
+        <Button as='a' inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }} href="/auth/google">
+          Registrarse
+        </Button>
+        {/* <Modal
+          onClose={() => this.setState({ openSignUp: false, dimmer: undefined })}
+          onOpen={() => this.setState({ openSignUp: true, dimmer: 'blurring' })}
+          open={this.state.openSignUp}
+          trigger={
+            <Button as='a' inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }}>
+              Registrarse
+            </Button>
+          }
+          dimmer={this.state.dimmer}
+        >
+          <Modal.Content image>
+            <div className='flex-container horizontal around max-width'>
+              <Image size='medium' src='https://react.semantic-ui.com/images/avatar/large/rachel.png' wrapped />
+              <Modal.Description>
+                  <SignUpForm />
+              </Modal.Description>
+            </div>
+            
+          </Modal.Content>
+        </Modal> */}
+      </>
+    )
+  }
+
   render() {
     const children = [...this.props.children.slice(0, this.props.children.length - 1)];
     const { fixed } = this.state
     const utils = this.props.children[this.props.children.length - 1];
-
+    const updateSections = utils.updateSections;
     return (
       <Media greaterThan='mobile'>
         <Visibility
@@ -105,88 +172,34 @@ class DesktopContainer extends Component {
                 <Link to={'/'}>
                   <Menu.Item 
                     name='Inicio' 
-                    active={this.state.activeItem === 'Inicio'} 
-                    onClick={e => {utils.onNavBarItem(e); this.setState({ activeItem: 'Inicio' })}}>
+                    active={utils.tabActive === 'Inicio'} 
+                    onClick={e => {utils.onNavBarItem(e); this.setState({ activeItem: 'Inicio' }); updateSections(e)}}>
                     Inicio
                   </Menu.Item>
                 </Link>
                 <Link to={'/mis-productos'}>
                   <Menu.Item 
                     name='Mis Productos' 
-                    active={this.state.activeItem === 'Mis Productos'} 
-                    onClick={e => {utils.onNavBarItem(e); this.setState({ activeItem: 'Mis Productos' })}}>
+                    active={utils.tabActive === 'Mis Productos'} 
+                    onClick={e => {utils.onNavBarItem(e); this.setState({ activeItem: 'Mis Productos' }); updateSections(e)}}>
                     Mis Productos
                   </Menu.Item>
                 </Link>
                 {/* <Menu.Item as='a'>Company</Menu.Item>
                 <Menu.Item as='a'>Careers</Menu.Item> */}
-                <Link to={'/tendencias'}>
+                {/* <Link to={'/tendencias'}>
                   <Menu.Item 
                     name='Tendencias' 
-                    active={this.state.activeItem === 'Tendencias'} 
+                    active={utils.tabActive === 'Tendencias'} 
                     onClick={e => {utils.onNavBarItem(e); this.setState({ activeItem: 'Tendencias' })}}>
                     Tendencias
                   </Menu.Item>
-                </Link>
+                </Link> */}
                 <Menu.Item position='right'>
                   {/* <Button as='a' inverted={!fixed}>
                     Ingresar
                   </Button> */}
-                  <Modal
-                    onClose={() => this.setState({ openLogin: false, dimmer: undefined })}
-                    onOpen={() => this.setState({ openLogin: true, dimmer: 'blurring' })}
-                    open={this.state.openLogin}
-                    trigger={
-                      <Button as='a' inverted={!fixed}>
-                        Ingresar
-                      </Button>
-                    }
-                    dimmer={this.state.dimmer}
-                  >
-                    {/* <Modal.Header>Select a Photo</Modal.Header> */}
-                    <Modal.Content image>
-                      <div className='flex-container horizontal around max-width'>
-                        <Image size='medium' src='https://react.semantic-ui.com/images/avatar/large/rachel.png' wrapped />
-                        <Modal.Description>
-                            <LoginForm />
-                        </Modal.Description>
-                      </div>
-                      
-                    </Modal.Content>
-                    {/* <Modal.Actions>
-                      <Button color='black' onClick={() => this.setState({ open: false })}>
-                        Nope
-                      </Button>
-                      <Button
-                        content="Yep, that's me"
-                        labelPosition='right'
-                        icon='checkmark'
-                        onClick={() => this.setState({ open: false })}
-                        positive
-                      />
-                    </Modal.Actions> */}
-                  </Modal>
-                  <Modal
-                    onClose={() => this.setState({ openSignUp: false, dimmer: undefined })}
-                    onOpen={() => this.setState({ openSignUp: true, dimmer: 'blurring' })}
-                    open={this.state.openSignUp}
-                    trigger={
-                      <Button as='a' inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }}>
-                        Registrarse
-                      </Button>
-                    }
-                    dimmer={this.state.dimmer}
-                  >
-                    <Modal.Content image>
-                      <div className='flex-container horizontal around max-width'>
-                        <Image size='medium' src='https://react.semantic-ui.com/images/avatar/large/rachel.png' wrapped />
-                        <Modal.Description>
-                            <SignUpForm />
-                        </Modal.Description>
-                      </div>
-                      
-                    </Modal.Content>
-                  </Modal>
+                  {this.renderUserSection(fixed, utils.auth)}
                 </Menu.Item>
               </Container>
             </Menu>
@@ -219,6 +232,72 @@ class MobileContainer extends Component {
     })
   }
 
+  renderUserSection(auth) {
+    if (auth === null) {
+      return 
+    }
+    if (auth) {
+      return (
+        <div>
+          <Image src={auth.photos[0].value} alt={auth.name.givenName} avatar/>
+          <a href="/api/logout"><Icon name='log out' size='small' className='padding-1'/></a>
+        </div>
+      )
+    }
+    return (
+      <>
+        <Button as='a' inverted href="/auth/google">
+          Ingresar
+        </Button>
+        {/* <Modal
+          onClose={() => this.setState({ openLogin: false, dimmer: undefined })}
+          onOpen={() => this.setState({ openLogin: true, dimmer: 'blurring' })}
+          open={this.state.openLogin}
+          trigger={
+            <Button as='a' inverted >
+              Ingresar
+            </Button>
+          }
+          dimmer={this.state.dimmer}
+        >
+          <Modal.Content image>
+            <div className='flex-container horizontal max-width'>
+              <Modal.Description>
+                  <LoginForm />
+              </Modal.Description>
+            </div>
+            
+          </Modal.Content>
+        </Modal> */}
+        
+        <Button as='a' inverted style={{ marginLeft: '0.5em' }} href="/auth/google">
+          Registrarse
+        </Button>
+
+        {/* <Modal
+          onClose={() => this.setState({ openSignUp: false, dimmer: undefined })}
+          onOpen={() => this.setState({ openSignUp: true, dimmer: 'blurring' })}
+          open={this.state.openSignUp}
+          trigger={
+            <Button as='a' inverted style={{ marginLeft: '0.5em' }}>
+              Registrarse
+            </Button>
+          }
+          dimmer={this.state.dimmer}
+        >
+          <Modal.Content image>
+            <div className='flex-container horizontal max-width'>
+              <Modal.Description>
+                  <SignUpForm />
+              </Modal.Description>
+            </div>
+            
+          </Modal.Content>
+        </Modal> */}
+      </>
+    )
+  }
+
   render() {
     const children = [...this.props.children.slice(0, this.props.children.length - 1)];
     const { sidebarOpened } = this.state;
@@ -239,27 +318,27 @@ class MobileContainer extends Component {
             <Link to={'/'}>
               <Menu.Item 
                 name='Inicio' 
-                active={this.state.activeItem === 'Inicio'} 
-                onClick={e => {utils.onNavBarItem(e); this.setState({ activeItem: 'Inicio' })}}>
+                active={utils.tabActive === 'Inicio'} 
+                onClick={e => {utils.onNavBarItem(e); this.setState({ activeItem: 'Inicio' }); updateSections(e)}}>
                 Inicio
               </Menu.Item>
             </Link>
             <Link to={'/mis-productos'}>
               <Menu.Item 
                 name='Mis Productos' 
-                active={this.state.activeItem === 'Mis Productos'} 
-                onClick={e => {utils.onNavBarItem(e); this.setState({ activeItem: 'Mis Productos' })}}>
+                active={utils.tabActive === 'Mis Productos'} 
+                onClick={e => {utils.onNavBarItem(e); this.setState({ activeItem: 'Mis Productos' }); updateSections(e)}}>
                 Mis Productos
               </Menu.Item>
             </Link>
-            <Link to={'/tendencias'}>
+            {/* <Link to={'/tendencias'}>
               <Menu.Item 
                 name='Tendencias' 
-                active={this.state.activeItem === 'Tendencias'} 
+                active={utils.tabActive === 'Tendencias'} 
                 onClick={e => {utils.onNavBarItem(e); this.setState({ activeItem: 'Tendencias' })}}>
                 Tendencias
               </Menu.Item>
-            </Link>
+            </Link> */}
           </Sidebar>
 
           <Sidebar.Pusher dimmed={sidebarOpened}>
@@ -271,63 +350,11 @@ class MobileContainer extends Component {
             >
               <Container>
                 <Menu inverted pointing secondary size='large'>
-                  <Menu.Item onClick={this.handleToggle}>
+                  <Menu.Item onClick={this.handleToggle} style={{ alignSelf: 'center' }}>
                     <Icon name='sidebar' />
                   </Menu.Item>
                   <Menu.Item position='right'>
-                  <Modal
-                    onClose={() => this.setState({ openLogin: false, dimmer: undefined })}
-                    onOpen={() => this.setState({ openLogin: true, dimmer: 'blurring' })}
-                    open={this.state.openLogin}
-                    trigger={
-                      <Button as='a' inverted>
-                        Ingresar
-                      </Button>
-                    }
-                    dimmer={this.state.dimmer}
-                  >
-                    {/* <Modal.Header>Select a Photo</Modal.Header> */}
-                    <Modal.Content image>
-                      <div className='flex-container horizontal max-width'>
-                        <Modal.Description>
-                            <LoginForm />
-                        </Modal.Description>
-                      </div>
-                      
-                    </Modal.Content>
-                    {/* <Modal.Actions>
-                      <Button color='black' onClick={() => this.setState({ open: false })}>
-                        Nope
-                      </Button>
-                      <Button
-                        content="Yep, that's me"
-                        labelPosition='right'
-                        icon='checkmark'
-                        onClick={() => this.setState({ open: false })}
-                        positive
-                      />
-                    </Modal.Actions> */}
-                  </Modal>
-                    <Modal
-                    onClose={() => this.setState({ openSignUp: false, dimmer: undefined })}
-                    onOpen={() => this.setState({ openSignUp: true, dimmer: 'blurring' })}
-                    open={this.state.openSignUp}
-                    trigger={
-                      <Button as='a' inverted style={{ marginLeft: '0.5em' }}>
-                        Registrarse
-                      </Button>
-                    }
-                    dimmer={this.state.dimmer}
-                  >
-                    <Modal.Content image>
-                      <div className='flex-container horizontal max-width'>
-                        <Modal.Description>
-                            <SignUpForm />
-                        </Modal.Description>
-                      </div>
-                      
-                    </Modal.Content>
-                  </Modal>
+                    {this.renderUserSection(utils.auth)}
                   </Menu.Item>
                 </Menu>
               </Container>
