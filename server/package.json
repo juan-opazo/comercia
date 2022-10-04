@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/storage": "^6.5.2",
     "aws-sdk": "^2.1209.0",
     "body-parser": "^1.20.0",
     "cookie-session": "^2.0.0",

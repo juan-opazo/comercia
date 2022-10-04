@@ -1,9 +1,10 @@
 const aws = require('aws-sdk');
-const multer = require('multer')
-const multerS3 = require('multer-s3')
+const multer = require('multer');
+const multerS3 = require('multer-s3');
+const keys = require('../config/keys');
 aws.config.update({
-    secretAccessKey: 'LrgFmsfRcBhtC/R9MtzsgrRX/YqbGUXcCBO6tYgC',
-    accessKeyId: 'AKIAVGMENO5KDBB5ICYI',
+    secretAccessKey: keys.AWSS3ClientSecret,
+    accessKeyId: keys.AWSS3ClientID,
     region: 'us-east-1'
 });
 s3 = new aws.S3();
@@ -12,7 +13,7 @@ s3 = new aws.S3();
 module.exports = multer({
     storage: multerS3({
       s3: s3,
-      bucket: 'comercia-dev/products',
+      bucket: keys.AWSS3Bucket,
       metadata: function (req, file, cb) {
         cb(null, Object.assign({}, req.body));
       },
