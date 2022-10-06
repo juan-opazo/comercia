@@ -1,6 +1,13 @@
 const upload = require('../services/s3');
 const ProductHandler = require('../services/productHandler');
+const Multer = require('multer');
 
+const multer = Multer({
+    storage: Multer.memoryStorage(),
+    limits: {
+      fileSize: 25 * 1024 * 1024, // no larger than 5mb, you can change as needed.
+    },
+  });
 
 module.exports = (app) => {
     app.get('/api/my_products', async (req, res) => {
@@ -13,14 +20,14 @@ module.exports = (app) => {
         res.send(products);
     });
 
-    app.post('/api/new_product', upload.single('image'), async (req, res) => {
+    app.post('/api/new_product', multer.single('image'), async (req, res) => {
         console.log(req.file.metadata);
-        const product = await new ProductHandler(req.file.metadata, req.file.location, false).insert()
+        const product = await new ProductHandler(req.body, req.file, false).insert()
         res.send(product);
     });
 
-    app.put('/api/add_image_to_product', upload.single('image'), async (req, res) => {
-        const product = await new ProductHandler(req.file.metadata, req.file.location, false).add_image()
+    app.put('/api/add_image_to_product', multer.single('image'), async (req, res) => {
+        const product = await new ProductHandler(req.body, req.file, false).add_image()
         res.send(product);
     });
 

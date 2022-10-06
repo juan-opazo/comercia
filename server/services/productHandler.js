@@ -1,13 +1,59 @@
 const mongoose = require('mongoose');
+const { Storage } = require('@google-cloud/storage');
 const keys = require('../config/keys');
 
 const Product = mongoose.model('products');
 const Comment = mongoose.model('comments');
 
 class ProductHandler {
-    constructor(data, imgUrl, isArchived) {
-        this.imgUrl = imgUrl;
+    constructor(data, file, isArchived) {
+        this.imgUrl = file.location;
+        this.file = file;
         this.data = { ...data };
+    }
+
+    async upload_image_to_cloud_storage_and_add_to_product(product) {
+        const storage = new Storage({
+            keyFilename: 'comercia-dev-d80820ff534b.json',
+            projectId: 'comercia-dev',
+        });
+        const bucketName = keys.cloudStorageBucketName;
+        async function createBucket() {
+            // Creates the new bucket
+            await storage.createBucket(bucketName);
+        }
+
+        createBucket().catch(console.error);
+        const bucket = storage.bucket(bucketName);
+        const today = new Date();
+        const originalname = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}_${this.file.originalname}`;
+        const blob = bucket.file(originalname);
+        const blobStream = blob.createWriteStream({
+        resumable: false,
+        });
+
+        blobStream.on("error", (err) => {
+            console.error(err.message)
+        });
+
+        blobStream.on("finish", async (data) => {
+            // create a url to access file
+            const publicURL = `https://storage.googleapis.com/${bucket.name}/${blob.name}`
+            console.log(`public url: ${publicURL}`)
+            try {
+                await bucket.file(originalname).makePublic();
+            } catch {
+                console.error(`Uploaded the file successfully: ${originalname}, but public access is denied!`);
+            }
+
+            // console.log("Uploaded the file successfully: ", originalname);
+            if (publicURL) {
+                product.images = [...product.images, publicURL];
+                const res = await product.save();
+                return res;
+            }
+        });
+        blobStream.end(this.file.buffer);
     }
 
     async insert() {
@@ -19,22 +65,22 @@ class ProductHandler {
             comments: [],
             rating: []
         };
-        if (this.imgUrl) this.data = { ...this.data, images:[this.imgUrl] };
-        const product = await new Product({
+        // if (this.imgUrl) this.data = { ...this.data, images:[this.imgUrl] };
+        const product = new Product({
             ...this.data
-        }).save();
+        });
+        await this.upload_image_to_cloud_storage_and_add_to_product(product);
+        // .save();
         
         return product;
     }
 
     async add_image() {
+        
         const product = await Product.findOne({ _id: this.data.id });
-        if (this.imgUrl) {
-            product.images = [...product.images, this.imgUrl];
-            const res = await product.save();
-            return res;
-        }
-        return product;
+        await this.upload_image_to_cloud_storage_and_add_to_product(product);
+        
+        return 200;
     }
 
     async add_comment() {
