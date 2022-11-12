@@ -2,20 +2,24 @@ version: '3'
 
 services:
   backend:
+    container_name: nodejs-app
     env_file:
         "./server/.env"
-    build:
-      context: ./server
-      dockerfile: ./Dockerfile
-    image: "comercia/backend"
+    build: ./server
+    volumes:
+      - ./server/:/usr/src/app/
+    expose:
+      - 5000
     ports:
       - "5000:5000"
   frontend:
-    build:
-      context: ./client
-      dockerfile: ./Dockerfile
-    image: "comercia/frontend"
+    container_name: reactjs-app
+    build: ./client
+    volumes:
+      - ./client/:/usr/src/app-reactjs/
+    expose:
+      - 3000
     ports:
       - "3000:3000"
-    links:
-      - "backend:be"
+    depends_on:
+      - backend
